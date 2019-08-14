@@ -32,11 +32,12 @@ namespace WallpaperApp
 
             this.ShowInTaskbar = false;
 
-            myPlayer = media;
+            myPlayer = fullMedia;
             myPlayer.Margin = new Thickness(0, 0, 0, 0);
 
 
             myPlayer.UnloadedBehavior = MediaState.Manual;
+            myPlayer.LoadedBehavior = MediaState.Manual;
 
             this.GoFullscreen();
 
@@ -51,6 +52,21 @@ namespace WallpaperApp
             myPlayer.Stop();
             myPlayer.Source = uri;
             myPlayer.Play();
+        }
+
+        public void VideoStop()
+        {
+            myPlayer.Stop();
+        }
+
+        public void VideoPlay()
+        {
+            myPlayer.Play();
+        }
+
+        public void VideoPause()
+        {
+            myPlayer.Pause();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

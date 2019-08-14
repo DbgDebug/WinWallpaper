@@ -30,12 +30,9 @@ namespace WallpaperApp
         public MainWindow()
         {
             InitializeComponent();
-
             media.UnloadedBehavior = MediaState.Manual;
-
-
+            media.LoadedBehavior = MediaState.Manual;
             fullWindow = new FullWindow();
-            fullWindow.Show();
         }
 
         // 壁纸窗口
@@ -106,13 +103,21 @@ namespace WallpaperApp
 
         private void btnFull_Checked(object sender, RoutedEventArgs e)
         {
-            if(fullWindow!=null)
-                fullWindow.Opacity = 1;
+            if (fullWindow != null)
+            {
+                fullWindow.Visibility = Visibility.Visible;
+                fullWindow.VideoPlay();
+            }
+               
         }
 
         private void btnFull_Unchecked(object sender, RoutedEventArgs e)
         {
-            fullWindow.Opacity = 0;
+            if (fullWindow != null)
+            {
+                fullWindow.Visibility = Visibility.Hidden;
+                fullWindow.VideoPause();
+            }
         }
 
 
@@ -123,8 +128,19 @@ namespace WallpaperApp
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if(currentAudioPath != null)
+            
+            if (currentAudioPath != null)
+            {
+                media.Pause();
+                fullWindow.Show();
                 fullWindow.ChangeSource(new Uri(currentAudioPath));
+                if (!btnFull.IsChecked.Value)
+                {
+                    fullWindow.VideoStop();
+                    fullWindow.Visibility = Visibility.Hidden;
+                }
+            }
+                
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -136,7 +152,7 @@ namespace WallpaperApp
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "视频|*.mp4;*.wmv";
+            openFileDialog.Filter = "视频|*.mp4;*.wmv;*.avi";
             openFileDialog.Multiselect = false;
             DialogResult dialogResult = openFileDialog.ShowDialog();
             if (dialogResult == System.Windows.Forms.DialogResult.OK)
@@ -154,7 +170,7 @@ namespace WallpaperApp
 
         }
 
-        private void media_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Media_MouseDown(object sender, MouseButtonEventArgs e)
         {
             media.Pause();
         }
